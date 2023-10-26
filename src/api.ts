@@ -12,15 +12,18 @@ export async function getData(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       pageNumber,
-      pageSize: pageSize > 24 ? pageSize : 25,
+      pageSize,
     }),
   };
 
   let response;
   try {
-    response = await fetch("/api/v1/app-service/get-apps", requestOptions);
+    response = await fetch(
+      `/api/v1/app-service/get-apps?page=${pageNumber}`,
+      requestOptions,
+    ).then((data) => data.json());
   } catch (error) {
-    console.log("There was an error", error);
+    console.error(error);
   }
-  return response?.json();
+  return response;
 }
